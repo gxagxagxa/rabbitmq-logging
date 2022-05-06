@@ -58,11 +58,30 @@ logger = logging.LoggerAdapter(logger, RabbitMQLoggingExtra)
 logger.warning('first logging to rabbitMQ')
 ```
 
-3. write your own log consumer to process logs. The message will looks like:
+The message will looks like:
 
 ```text
 2022-05-06 14:47:18,062 - ERROR - hello.world - andyguo - 192.168.0.108 - example.py - 17 : first logging to rabbitMQ
 ```
+
+3. write your own log consumer to process logs. Or running `RabbitMQDiskLogConsumer` as a daemon. (check
+   about [daemonize](https://github.com/gxagxagxa/useful-snippets/tree/main/src/daemonlize))
+
+```python
+from rabbitmq_logging.consumer.disk_consumer import RabbitMQDiskLogConsumer
+
+consumer = RabbitMQDiskLogConsumer()
+consumer.start()
+```
+
+or by shell:
+
+```shell
+$ python disk_consumer.py
+```
+
+To prevent the consumer process from going offline, you can use `cron` to start it periodically. Rest assured, if the
+daemon process remains online, it will not be started twice.
 
 # Config
 
