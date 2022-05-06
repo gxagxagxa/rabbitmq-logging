@@ -7,6 +7,7 @@ class RabbitMQSettings(BaseSettings):
     # from rabbitmq config file, and pika.ConnectionParameter class
     RABBITMQ_HOST: Optional[str] = '127.0.0.1'
     RABBITMQ_PORT: Optional[PositiveInt] = 5672
+    RABBITMQ_HTTP_PORT: Optional[PositiveInt] = 15672
     RABBITMQ_VIRTUAL_HOST: Optional[str] = '/'
     RABBITMQ_USERNAME: Optional[str] = 'guest'
     RABBITMQ_PASSWORD: Optional[SecretStr] = 'guest'
@@ -26,7 +27,7 @@ class RabbitMQSettings(BaseSettings):
     # rabbitmq handler package
     RABBITMQ_LOGGING_EXCHANGE: Optional[str] = 'default_rabbitmq_logging_exchange'
     RABBITMQ_LOGGING_QUEUE: Optional[str] = 'default_rabbitmq_logging_queue'
-    RABBITMQ_LOGGING_ROUTER_KEY: Optional[str] = 'default_rabbitmq_logging'
+    RABBITMQ_LOGGING_ROUTER_KEY: Optional[str] = 'default_rabbitmq_logging_router_key'
 
     # from rabbitmq docs
     RABBITMQ_NODE_IP_ADDRESS: Optional[str] = ''

@@ -5,6 +5,7 @@ class RabbitMQEnvironmentVariableEnum(Enum):
     # from rabbitmq config file, and pika.ConnectionParameter class
     RABBITMQ_HOST = 'RABBITMQ_HOST'
     RABBITMQ_PORT = 'RABBITMQ_PORT'
+    RABBITMQ_HTTP_PORT = 'RABBITMQ_HTTP_PORT'
     RABBITMQ_VIRTUAL_HOST = 'RABBITMQ_VIRTUAL_HOST'
     RABBITMQ_USERNAME = 'RABBITMQ_USERNAME'
     RABBITMQ_PASSWORD = 'RABBITMQ_PASSWORD'
