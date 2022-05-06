@@ -37,35 +37,23 @@ docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.9-man
 2. log something in your code, as before.
 
 ```python
-import logging
+import rabbitmq_logging
 
-from rabbitmq_logging.adapter import RabbitMQLoggingExtra
-from rabbitmq_logging.formatter import RabbitMQLoggingDefaultFormatter
-from rabbitmq_logging.handler.rabbitmq_handler.rabbitmq_pika_handler import RabbitMQPikaHandler
-
-# get logger
-logger = logging.getLogger('hello.world')
-
-# add rabbitmq handler, and set formatter
-handler = RabbitMQPikaHandler()
-handler.setFormatter(RabbitMQLoggingDefaultFormatter())
-logger.addHandler(handler)
-
-# add extra info by Adapter
-logger = logging.LoggerAdapter(logger, RabbitMQLoggingExtra)
+# get a logger, with handler and formatter
+logger = rabbitmq_logging.get_logger('hello.world')
 
 # start using logger!
 logger.warning('first logging to rabbitMQ')
 ```
 
-The message will looks like:
+The message in the queue will looks like:
 
 ```text
 2022-05-06 14:47:18,062 - ERROR - hello.world - andyguo - 192.168.0.108 - example.py - 17 : first logging to rabbitMQ
 ```
 
-3. write your own log consumer to process logs. Or running `RabbitMQDiskLogConsumer` as a daemon. (check
-   about [daemonize](https://github.com/gxagxagxa/useful-snippets/tree/main/src/daemonlize))
+3. Run `RabbitMQDiskLogConsumer` as a daemon. (check
+   about [daemonize](https://github.com/gxagxagxa/useful-snippets/tree/main/src/daemonlize)). Or write your own log consumer to process logs.
 
 ```python
 from rabbitmq_logging.consumer.disk_consumer import RabbitMQDiskLogConsumer
@@ -80,7 +68,7 @@ or by shell:
 $ python disk_consumer.py
 ```
 
-To prevent the consumer process from going offline, you can use `cron` to start it periodically. Rest assured, if the
+To prevent the consumer process from going offline, you can use `cron` to start it periodically. Don't worry, if the
 daemon process remains online, it will not be started twice.
 
 # Config
