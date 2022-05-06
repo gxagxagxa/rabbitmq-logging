@@ -14,7 +14,9 @@ class RabbitMQDiskLogConsumer(Daemon):
 
     def __init__(self, pid_file=None, stdin='/dev/null', stdout='', stderr='',
                  settings: Optional[RabbitMQSettings] = None,
-                 log_file: Optional[Path] = None) -> None:
+                 log_file: Optional[Path] = None,
+                 max_log_file_size=1024 * 1024 * 16,
+                 backup_count=8) -> None:
         pid_file = pid_file or Path(__file__).with_name('pid_file')
         stdout = stdout or Path(__file__).with_name('stdout')
         stderr = stderr or Path(__file__).with_name('stderr')
@@ -24,11 +26,11 @@ class RabbitMQDiskLogConsumer(Daemon):
         self.connection: Optional[pika.BlockingConnection] = None
         self.channel: Optional[pika.adapters.blocking_connection.BlockingChannel] = None
         self.log_file = log_file or Path(__file__).with_name('rabbitmq_default_logging.log')
-        self.logger = self.setup_logger()
+        self.logger = self.setup_logger(max_log_file_size, backup_count)
 
-    def setup_logger(self):
+    def setup_logger(self, max_log_file_size, backup_count):
         logger = logging.getLogger(__file__)
-        handler = RotatingFileHandler(self.log_file, maxBytes=1024 * 1024 * 16, backupCount=8)
+        handler = RotatingFileHandler(self.log_file, maxBytes=max_log_file_size, backupCount=backup_count)
         handler.setFormatter(logging.Formatter('%(message)s'))
         logger.addHandler(handler)
         return logger
